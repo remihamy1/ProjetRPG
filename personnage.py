@@ -4,6 +4,7 @@ class Personnage:
         self.classe = classe
         self.statistiques = self.initialiser_statistiques()
         self.inventaire = []
+        self.position = (0, 0)  
 
     def initialiser_statistiques(self):
         if self.classe == "guerrier":

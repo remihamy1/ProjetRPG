@@ -21,7 +21,7 @@ class Joueur:
         elif choix_action == "3":
             self.utiliser_objet()
         elif choix_action == "4":
-            self.afficher_inventaire()  # Appel de la méthode pour afficher l'inventaire
+            self.afficher_inventaire()  
         else:
             print("Choix invalide.")
 
