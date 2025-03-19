@@ -1,39 +1,32 @@
-from personnage import creation_personnage, Monstre
-
-def simuler_combat(personnage, monstre):
-    print(f"Un combat commence entre {personnage.nom} et {monstre.nom}!")
-    while personnage.est_vivant() and monstre.est_vivant():
-        personnage.attaquer(monstre)
-        if not monstre.est_vivant():
-            print(f"{monstre.nom} a été vaincu!")
-            break
-        monstre.attaquer(personnage)
-        if not personnage.est_vivant():
-            print(f"{personnage.nom} a été vaincu!")
-            break
+from jeu import Jeu
 
 def main():
-    nom = input("Nommez votre personnage : ")
-    while len(nom) < 1 or len(nom) > 20:
-        nom = input("Le nom doit avoir entre 1 et 20 caractères. Réessayez : ")
+    jeu = Jeu()
 
-    choix_classe = input("Choisissez votre classe (1. Guerrier, 2. Mage, 3. Voleur) : ")
-    while choix_classe not in ["1", "2", "3"]:
-        choix_classe = input("Veuillez entrer un chiffre entre 1 et 3 : ")
+    nom = input("Entrez le nom de votre personnage : ")
 
-    classes = {
-        "1": "guerrier",
-        "2": "mage",
-        "3": "voleur"
-    }
+    print("Choisissez votre classe :")
+    print("1. Guerrier")
+    print("2. Mage")
+    print("3. Voleur")
 
-    classe = classes[choix_classe]
-    personnage = creation_personnage(nom, classe)
-    print(personnage)
+    choix_classe = input("Entrez le numéro de votre classe (1-3) : ")
 
-    monstre = Monstre("Gobelin", 20, 5, 2)  
+    if choix_classe == "1":
+        classe = "guerrier"
+    elif choix_classe == "2":
+        classe = "mage"
+    elif choix_classe == "3":
+        classe = "voleur"
+    else:
+        print("Choix invalide. Le jeu va se terminer.")
+        return
 
-    simuler_combat(personnage, monstre)
+    jeu.initialiser(nom, classe)
 
-if __name__ == "__main__":
+    print(f"Bienvenue, {nom} le {classe}! Votre aventure commence...")
+
+    jeu.jouer()
+
+if __name__ == '__main__':
     main()

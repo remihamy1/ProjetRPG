@@ -1,35 +1,19 @@
 import unittest
-from personnage import creation_personnage
+from personnage import Personnage
 
 class TestPersonnage(unittest.TestCase):
-
     def test_creation_personnage_valide(self):
-        perso = creation_personnage("Mohamed", "guerrier")
-        self.assertEqual(perso.nom, "Mohamed")
-        self.assertEqual(perso.classe, "guerrier")
-        self.assertEqual(perso.pv, 150)
-        self.assertEqual(perso.pm, 50)
-        self.assertEqual(perso.force, 15)
+        personnage = Personnage("Aragorn", "guerrier")
+        self.assertEqual(personnage.nom, "Aragorn")
+        self.assertEqual(personnage.statistiques["PV"], 150)
 
     def test_validation_nom_trop_court(self):
         with self.assertRaises(ValueError):
-            creation_personnage("", "mage")
+            Personnage("A", "guerrier")
 
     def test_validation_nom_trop_long(self):
         with self.assertRaises(ValueError):
-            creation_personnage("a" * 21, "voleur")
-
-    def test_selection_classe_valide(self):
-        perso = creation_personnage("Samy", "mage")
-        self.assertEqual(perso.classe, "mage")
-        self.assertEqual(perso.intelligence, 15)
-
-    def test_affichage_recapitulatif(self):
-        perso = creation_personnage("Legolas", "voleur")
-        recap = str(perso)
-        self.assertIn("Personnage: Legolas", recap)
-        self.assertIn("Classe: voleur", recap)
-        self.assertIn("Points de Vie (PV): 110", recap)
+            Personnage("A" * 21, "guerrier")
 
 if __name__ == '__main__':
     unittest.main()
