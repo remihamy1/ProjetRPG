@@ -1,4 +1,16 @@
-from personnage import creation_personnage
+from personnage import creation_personnage, Monstre
+
+def simuler_combat(personnage, monstre):
+    print(f"Un combat commence entre {personnage.nom} et {monstre.nom}!")
+    while personnage.est_vivant() and monstre.est_vivant():
+        personnage.attaquer(monstre)
+        if not monstre.est_vivant():
+            print(f"{monstre.nom} a été vaincu!")
+            break
+        monstre.attaquer(personnage)
+        if not personnage.est_vivant():
+            print(f"{personnage.nom} a été vaincu!")
+            break
 
 def main():
     nom = input("Nommez votre personnage : ")
@@ -18,6 +30,10 @@ def main():
     classe = classes[choix_classe]
     personnage = creation_personnage(nom, classe)
     print(personnage)
+
+    monstre = Monstre("Gobelin", 20, 5, 2)  
+
+    simuler_combat(personnage, monstre)
 
 if __name__ == "__main__":
     main()

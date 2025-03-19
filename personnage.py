@@ -1,3 +1,18 @@
+class Monstre:
+    def __init__(self, nom, pv, force, defense):
+        self.nom = nom
+        self.pv = pv
+        self.force = force
+        self.defense = defense
+
+    def est_vivant(self):
+        return self.pv > 0
+
+    def attaquer(self, cible):
+        degats = max(self.force - cible.defense, 1)
+        cible.pv -= degats
+        print(f"{self.nom} attaque {cible.nom} et inflige {degats} dégâts.")
+
 class Personnage:
     def __init__(self, nom, classe):
         self.nom = nom
@@ -49,6 +64,14 @@ class Personnage:
             self.chance = 12
             self.endurance = 7
             self.esprit = 6
+
+    def est_vivant(self):
+        return self.pv > 0
+
+    def attaquer(self, cible):
+        degats = max(self.force - cible.defense, 1)
+        cible.pv -= degats
+        print(f"{self.nom} attaque {cible.nom} et inflige {degats} dégâts.")
 
     def __str__(self):
         return (f"Personnage: {self.nom}\n"

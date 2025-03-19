@@ -1,5 +1,5 @@
 import unittest
-from donjon import Salle, Donjon, creer_donjon
+from donjon import Salle, Donjon, creer_donjon, Monstre
 
 class TestDonjon(unittest.TestCase):
 
@@ -44,6 +44,22 @@ class TestDonjon(unittest.TestCase):
         donjon.salles[x][y].tresor = "Or"
         description = donjon.afficher_salle_actuelle()
         self.assertIn("Trésor: Or", description)
+
+    def test_monstre_dans_salle(self):
+        donjon = creer_donjon(2, 2)
+        x, y = donjon.position_joueur
+        donjon.salles[x][y].monstre = Monstre("Gobelin", 20, 5)
+        description = donjon.afficher_salle_actuelle()
+        self.assertIn("Monstre: Gobelin", description)
+
+    def test_deplacement_vers_monstre(self):
+        donjon = creer_donjon(3, 3)
+        donjon.salles[1][1].monstre = Monstre("Gobelin", 20, 5)
+
+        donjon.deplacer_joueur("est")
+        donjon.deplacer_joueur("est")
+        description = donjon.afficher_salle_actuelle()
+        self.assertIn("Monstre: Gobelin", description)
 
 if __name__ == '__main__':
     unittest.main()
