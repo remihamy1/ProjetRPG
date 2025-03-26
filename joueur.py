@@ -1,51 +1,50 @@
-class Joueur:
-    def __init__(self, personnage):
-        self.personnage = personnage
-
-    def choisir_action(self, cible=None):
+class InterfaceUtilisateur:
+    def choisir_action(self):
         print("Choisissez une action :")
         print("1. Attaquer")
         print("2. Défendre")
         print("3. Utiliser un objet")
-        print("4. Afficher l'inventaire")  # Ajout de cette option
+        print("4. Afficher l'inventaire")
+        return input("Entrez le numéro de l'action (1-3) : ")
 
-        choix_action = input("Entrez le numéro de l'action (1-4) : ")
+class Joueur:
+    def __init__(self, personnage, interface_utilisateur):
+        self.personnage = personnage
+        self.interface_utilisateur = interface_utilisateur
 
-        if choix_action == "1":
-            if cible is None:
-                print("Aucune cible à attaquer.")
+    def jouer_tour(self, cible=None):
+        while True:
+            choix_action = self.interface_utilisateur.choisir_action()
+            if choix_action == "1":
+                if cible is None:
+                    print("Aucune cible à attaquer.")
+                else:
+                    self.personnage.attaquer(cible)
+                break
+            elif choix_action == "2":
+                self.personnage.defendre()
+                break
+            elif choix_action == "3":
+                self.utiliser_objet()
+                break
+            elif choix_action == "4":
+                if not self.personnage.inventaire.contenu:
+                    print("Votre inventaire est vide ! Bonne chance hehe.")
+                else:
+                    self.personnage.inventaire.afficher()
             else:
-                self.personnage.attaquer(cible)
-        elif choix_action == "2":
-            self.personnage.defendre()
-        elif choix_action == "3":
-            self.utiliser_objet()
-        elif choix_action == "4":
-            self.afficher_inventaire()  
-        else:
-            print("Choix invalide.")
+                print("Choix invalide.")
 
     def utiliser_objet(self):
-        if not self.personnage.inventaire:
+        if not self.personnage.inventaire.contenu:
             print("Votre inventaire est vide.")
             return
 
-        print("Objets dans votre inventaire :")
-        for index, objet in enumerate(self.personnage.inventaire):
-            print(f"{index + 1}: {objet.nom}")
-
+        self.personnage.inventaire.afficher()
         choix = int(input("Choisissez l'objet à utiliser (numéro) : ")) - 1
-        if 0 <= choix < len(self.personnage.inventaire):
-            objet = self.personnage.inventaire.pop(choix)
+        if 0 <= choix < len(self.personnage.inventaire.contenu):
+            objet = self.personnage.inventaire.retirer(choix)
             print(f"Vous utilisez {objet.nom}.")
             objet.utiliser(self.personnage)
         else:
             print("Choix invalide.")
-
-    def afficher_inventaire(self):
-        if not self.personnage.inventaire:
-            print("Votre inventaire est vide.")
-        else:
-            print("Objets dans votre inventaire :")
-            for index, objet in enumerate(self.personnage.inventaire):
-                print(f"{index + 1}: {objet.nom}")

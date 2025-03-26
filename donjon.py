@@ -1,10 +1,9 @@
 import random
 from objet import Objet, Potion, Arme, Armure
 
-class Donjon:
+class GenerateurDonjon:
     def __init__(self, taille):
         self.taille = taille
-        self.grille = self.generer_grille()
 
     def generer_grille(self):
         return [[self.generer_contenu() for _ in range(self.taille)] for _ in range(self.taille)]
@@ -21,25 +20,33 @@ class Donjon:
             ])
         return contenu
 
-    def deplacer_personnage(self, personnage, direction):
-        x, y = personnage.position
-        if direction == "N":
-            y -= 1
-        elif direction == "S":
-            y += 1
-        elif direction == "E":
-            x += 1
-        elif direction == "O":
-            x -= 1
+class GestionnaireDeplacement:
+    def __init__(self, grille):
+        self.grille = grille
 
-        if 0 <= x < self.taille and 0 <= y < self.taille:
+    def deplacer_personnage(self, personnage, direction):
+        personnage.position.deplacer(direction)
+        x, y = personnage.position.x, personnage.position.y
+        if 0 <= x < len(self.grille) and 0 <= y < len(self.grille):
             contenu = self.grille[y][x]
             if isinstance(contenu, Objet):
                 print(f"Vous avez trouvé un {contenu.nom}!")
-                personnage.inventaire.append(contenu)
-                self.grille[y][x] = 'vide' 
+                if isinstance(contenu, (Arme, Armure, Potion)):
+                    choix = input("Voulez-vous stocker l'objet dans l'inventaire ? (1 pour Oui, 2 pour Non) : ")
+                    if choix == "1":
+                        personnage.inventaire.ajouter(contenu)
+                self.grille[y][x] = 'vide'
             elif contenu == "monstre":
                 print("Un monstre bloque votre chemin ! Vous devez le vaincre pour avancer.")
-            personnage.position = (x, y)
         else:
             print("Déplacement invalide. Vous ne pouvez pas sortir de la grille.")
+
+class Donjon:
+    def __init__(self, taille):
+        self.taille = taille
+        self.generateur = GenerateurDonjon(taille)
+        self.grille = self.generateur.generer_grille()
+        self.gestionnaire_deplacement = GestionnaireDeplacement(self.grille)
+
+    def deplacer_personnage(self, personnage, direction):
+        self.gestionnaire_deplacement.deplacer_personnage(personnage, direction)

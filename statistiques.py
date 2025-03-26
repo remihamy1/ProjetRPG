@@ -1,4 +1,4 @@
-class Stats:
+class Statistiques:
     def __init__(self, pv, pm, force, intelligence, defense, resistance_magique, agilite, chance, endurance, esprit):
         self.pv = pv
         self.pm = pm
